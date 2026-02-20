@@ -12,6 +12,16 @@
 <link rel="shortcut icon" href="mosque.png" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa+Ink:wght@400;700&family=Scheherazade+New:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Tiro+Bangla:ital@0;1&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Force GPU layer for main scroll container */
+.root{ transform:translateZ(0); }
+/* Contain paint for fixed panels */
+.panel{ contain:content; }
+/* Smooth scrolling */
+html{ scroll-behavior:smooth; }
+/* Tap targets minimum 44px */
+.t-btn{ min-height:44px; }
+</style>
 
 <style>
 /* ══════════════════════════════════════════════════
@@ -41,66 +51,84 @@ body{
 }
 
 /* ══════════════════════════════════════════════════
-   BACKGROUND — 6 layered atmosphere
+   BACKGROUND — Islamic mosque scene
+   Single fixed layer, GPU composited, zero JS
 ══════════════════════════════════════════════════ */
-.bg-atmo{
+
+/* Base dark gradient on body itself */
+body{
+  background:
+    linear-gradient(175deg,#040e07 0%,#020704 55%,#010302 100%);
+}
+
+/* Islamic mosque silhouette — fixed bottom, painted once */
+.bg-mosque{
+  position:fixed;bottom:0;left:0;right:0;height:38vh;
+  z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 300' preserveAspectRatio='xMidYMax slice'%3E%3Cdefs%3E%3ClinearGradient id='sky' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%230e5c38' stop-opacity='.18'/%3E%3Cstop offset='1' stop-color='%230e5c38' stop-opacity='.04'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='300' fill='url(%23sky)'/%3E%3C!-- far left minaret --%3E%3Crect x='38' y='100' width='18' height='200' fill='%23071209'/%3E%3Crect x='33' y='90' width='28' height='14' rx='3' fill='%230a1c0d'/%3E%3Cpolygon points='47,62 33,90 61,90' fill='%230e2a12'/%3E%3Ccircle cx='47' cy='58' r='5' fill='%23d4a83222'/%3E%3C!-- left minaret --%3E%3Crect x='148' y='80' width='22' height='220' fill='%23071209'/%3E%3Crect x='142' y='68' width='34' height='16' rx='3' fill='%230a1c0d'/%3E%3Cpolygon points='159,38 142,68 176,68' fill='%230e2a12'/%3E%3Ccircle cx='159' cy='33' r='6' fill='%23d4a83230'/%3E%3C!-- main dome --%3E%3Crect x='270' y='160' width='260' height='140' fill='%23050e07'/%3E%3Cellipse cx='400' cy='162' rx='105' ry='80' fill='%23071209'/%3E%3Cellipse cx='400' cy='162' rx='88' ry='66' fill='%230a1a0c'/%3E%3C!-- dome highlight --%3E%3Cellipse cx='382' cy='130' rx='38' ry='22' fill='%23d4a8320a'/%3E%3C!-- main minaret left --%3E%3Crect x='258' y='90' width='26' height='210' fill='%23071209'/%3E%3Crect x='251' y='76' width='40' height='18' rx='4' fill='%230a1c0d'/%3E%3Cpolygon points='271,42 251,76 291,76' fill='%230e2a12'/%3E%3Ccircle cx='271' cy='36' r='7' fill='%23d4a83235'/%3E%3C!-- main minaret right --%3E%3Crect x='516' y='90' width='26' height='210' fill='%23071209'/%3E%3Crect x='509' y='76' width='40' height='18' rx='4' fill='%230a1c0d'/%3E%3Cpolygon points='529,42 509,76 549,76' fill='%230e2a12'/%3E%3Ccircle cx='529' cy='36' r='7' fill='%23d4a83235'/%3E%3C!-- right minaret --%3E%3Crect x='630' y='80' width='22' height='220' fill='%23071209'/%3E%3Crect x='624' y='68' width='34' height='16' rx='3' fill='%230a1c0d'/%3E%3Cpolygon points='641,38 624,68 658,68' fill='%230e2a12'/%3E%3Ccircle cx='641' cy='33' r='6' fill='%23d4a83230'/%3E%3C!-- far right minaret --%3E%3Crect x='744' y='100' width='18' height='200' fill='%23071209'/%3E%3Crect x='739' y='90' width='28' height='14' rx='3' fill='%230a1c0d'/%3E%3Cpolygon points='753,62 739,90 767,90' fill='%230e2a12'/%3E%3Ccircle cx='753' cy='58' r='5' fill='%23d4a83222'/%3E%3C!-- arched windows --%3E%3Cellipse cx='330' cy='200' rx='16' ry='22' fill='%230e3018'/%3E%3Cellipse cx='400' cy='200' rx='16' ry='22' fill='%230e3018'/%3E%3Cellipse cx='470' cy='200' rx='16' ry='22' fill='%230e3018'/%3E%3C!-- ground --%3E%3Crect x='0' y='278' width='800' height='22' fill='%23040c06'/%3E%3Cline x1='0' y1='278' x2='800' y2='278' stroke='%23d4a832' stroke-opacity='.12' stroke-width='1'/%3E%3C!-- crescent moon --%3E%3Ccircle cx='680' cy='40' r='18' fill='%23081208'/%3E%3Ccircle cx='688' cy='34' r='14' fill='%23040c06'/%3E%3C!-- stars --%3E%3Ccircle cx='720' cy='28' r='2' fill='%23d4a832' opacity='.35'/%3E%3Ccircle cx='700' cy='18' r='1.5' fill='%23d4a832' opacity='.28'/%3E%3Ccircle cx='740' cy='15' r='1.5' fill='%23d4a832' opacity='.25'/%3E%3Ccircle cx='760' cy='35' r='1' fill='%23d4a832' opacity='.20'/%3E%3Ccircle cx='60' cy='25' r='2' fill='%23d4a832' opacity='.30'/%3E%3Ccircle cx='100' cy='15' r='1.5' fill='%23d4a832' opacity='.22'/%3E%3Ccircle cx='130' cy='32' r='1' fill='%23d4a832' opacity='.18'/%3E%3C/svg%3E");
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+  background-position:bottom center;
+  opacity:.85;
+}
+
+/* Geometric tile overlay — just one CSS bg-image, zero DOM elements */
+.bg-geo{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='none' stroke='%23d4a832' stroke-width='.7'%3E%3Cpolygon points='60,4 71,36 104,36 78,56 88,88 60,68 32,88 42,56 16,36 49,36'/%3E%3Ccircle cx='60' cy='60' r='38'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:120px 120px;
+}
+
+/* Vignette darkens edges so content stays readable */
+.bg-vig{
   position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(ellipse 180% 65% at 50% -5%, rgba(14,92,56,.60) 0%,transparent 58%),
-    radial-gradient(ellipse 90%  55% at 95% 105%,rgba(14,92,56,.22) 0%,transparent 52%),
-    radial-gradient(ellipse 60%  45% at 0%   65%, rgba(14,92,56,.14) 0%,transparent 48%),
-    radial-gradient(ellipse 40%  30% at 50%  50%, rgba(14,92,56,.06) 0%,transparent 70%),
-    linear-gradient(175deg,#040c06 0%,#020704 50%,#010402 100%);
+    radial-gradient(ellipse 110% 60% at 50% 0%,rgba(14,92,56,.22) 0%,transparent 65%),
+    radial-gradient(ellipse 100% 100% at 50% 50%,transparent 30%,rgba(1,4,2,.72) 100%);
 }
-.bg-geo{
-  position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.062;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cdefs%3E%3Cstyle%3E.g%7Bfill:none;stroke:%23d4a832;%7D%3C/style%3E%3C/defs%3E%3Cg class='g'%3E%3Cpolygon points='110,10 124,50 164,50 132,74 144,114 110,90 76,114 88,74 56,50 96,50' stroke-width='1'/%3E%3Cpolygon points='110,28 120,56 150,56 128,72 136,100 110,84 84,100 92,72 70,56 100,56' stroke-width='0.5'/%3E%3Ccircle cx='110' cy='110' r='68' stroke-width='.45'/%3E%3Ccircle cx='110' cy='110' r='45' stroke-width='.3'/%3E%3Ccircle cx='110' cy='110' r='22' stroke-width='.22'/%3E%3Cline x1='110' y1='5' x2='110' y2='215' stroke-width='.22' stroke-dasharray='3,11'/%3E%3Cline x1='5' y1='110' x2='215' y2='110' stroke-width='.22' stroke-dasharray='3,11'/%3E%3Cline x1='26' y1='26' x2='194' y2='194' stroke-width='.18' stroke-dasharray='2,14'/%3E%3Cline x1='194' y1='26' x2='26' y2='194' stroke-width='.18' stroke-dasharray='2,14'/%3E%3C/g%3E%3C/svg%3E");
-  background-size:220px 220px;
+
+/* ── Mobile: simplify to single flat bg + geo tile only ── */
+@media(max-width:600px){
+  .bg-geo{ opacity:.030; }
+  .bg-vig{ background:radial-gradient(ellipse 100% 100% at 50% 50%,transparent 20%,rgba(1,4,2,.80) 100%); }
+  .bg-cali{ display:none; }
+  .bg-cali2{ display:none; }
 }
+
+/* Unused legacy layers — hidden */
+.bg-atmo{ display:none; }
 .bg-cali{position:fixed;inset:0;z-index:0;pointer-events:none;display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .bg-cali-text{
-  font-family:'Aref Ruqaa Ink',serif;
-  font-size:clamp(5rem,28vw,14rem);
-  color:rgba(184,146,30,.030);
-  white-space:nowrap;line-height:1;letter-spacing:.05em;user-select:none;
+  font-family:'Aref Ruqaa Ink',serif;font-size:clamp(5rem,28vw,14rem);
+  color:rgba(184,146,30,.025);white-space:nowrap;line-height:1;user-select:none;
   transform:rotate(-12deg) translateY(-5%);
-  text-shadow:0 0 80px rgba(184,146,30,.04);
 }
 .bg-cali2{
   position:fixed;bottom:-4%;right:-8%;z-index:0;pointer-events:none;
-  font-family:'Noto Naskh Arabic',serif;
-  font-size:clamp(4rem,22vw,11rem);
-  color:rgba(184,146,30,.022);
-  line-height:1;user-select:none;transform:rotate(8deg);
-}
-.bg-vig{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(ellipse 100% 100% at 50% 50%,transparent 35%,rgba(1,4,2,.55) 100%);
+  font-family:'Noto Naskh Arabic',serif;font-size:clamp(4rem,22vw,11rem);
+  color:rgba(184,146,30,.018);line-height:1;user-select:none;transform:rotate(8deg);
 }
 
 /* ══════════════════════════════════════════════════
-   FLOATING PARTICLES — spark dust only (mobile-safe)
-   Only opacity animations — zero transform cost
+   FLOATING DUST — pure CSS, opacity only
+   No JS spawn, no transform, no blur
+   Mobile: 8 dots   Desktop: 20 dots (CSS class names)
 ══════════════════════════════════════════════════ */
-.dust{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.dust{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
 
-/* Only class kept: tiny spark dust — pure opacity fade, no movement */
-.mote-star{
-  position:absolute;
-  width:2px;height:2px;border-radius:50%;
-  background:rgba(253,238,160,.90);
+/* All dust dots share one animation */
+.d{
+  position:absolute;border-radius:50%;
+  background:rgba(253,238,160,.85);
   will-change:opacity;
-  animation:sparkFade ease-in-out infinite;
+  animation:dustFade ease-in-out infinite;
 }
-@keyframes sparkFade{
-  0%,100%{opacity:0;}
-  50%    {opacity:1;}
-}
+@keyframes dustFade{0%,100%{opacity:0;}50%{opacity:1;}}
 
-/* Mobile override: remove streaks/orbs/glows entirely */
-@media(max-width:600px){
-  .mote,.mote-streak,.mote-glow,.mote-poly,.mote-crescent{ display:none!important; }
-}
+/* Desktop-only dots hidden on mobile */
+.d-desk{ display:none; }
+@media(min-width:601px){ .d-desk{ display:block; } }
 
 /* ══════════════════════════════════════════════════
    CROWN
@@ -853,69 +881,190 @@ body{
 /* visitor footer CSS now above */
 
 /* ══════════════════════════════════════════════════
-   MOBILE PERFORMANCE OVERRIDES
-   Strips the most GPU-hungry effects on small screens
+   MOBILE PERFORMANCE — COMPREHENSIVE OPTIMIZATION
+   Target: 60fps on low-end Android/iPhone
 ══════════════════════════════════════════════════ */
 @media(max-width:600px){
-  /* Kill box-shadow animations — biggest GPU win */
-  .p-row.now{
-    animation: cardSlideIn .45s cubic-bezier(.22,1,.36,1) both !important;
-    box-shadow:
-      0 0 0 2px rgba(253,238,160,.55),
-      0 0 20px rgba(212,168,50,.25) !important;
-    will-change: transform;
+
+  /* ── Dust: CSS-controlled, mobile gets 8 dots (d-desk hidden by default) ── */
+  /* no override needed — .d-desk already hidden via media query */
+
+  /* ── Crown: static, no animation ── */
+  .crown-top{ animation:none; opacity:.55; }
+
+  /* ── Hero: reduce padding ── */
+  .hero{ padding:36px 8px 14px; }
+
+  /* ── Halo: slower spin, lighter ── */
+  .halo::before{
+    animation-duration:30s !important;
+    background:conic-gradient(from 0deg,transparent 0%,rgba(212,168,50,.07) 50%,transparent 100%);
   }
-  /* Simplify nowBreath to opacity only */
-  @keyframes nowBreath{
-    0%,100%{opacity:.92;}
-    50%    {opacity:1;}
-  }
-  /* Simplify badge — no scale pulse */
-  .p-row.now .p-badge{
-    animation: none !important;
-    box-shadow:0 0 16px rgba(253,238,160,.40) !important;
-  }
-  /* Kill ping rings on mobile */
-  .p-row.now .p-badge::after{ animation:none !important; opacity:0 !important; }
-  .now-ping2{ animation:none !important; opacity:0 !important; }
-  /* Simplify time animation */
-  @keyframes timeInferno{
-    0%,100%{text-shadow:0 0 18px rgba(253,238,160,.70);}
-    50%    {text-shadow:0 0 28px rgba(255,255,220,.95);}
-  }
-  /* Kill stripe flicker */
-  @keyframes stripeFlicker{ 0%,100%{opacity:.85;} }
-  /* Kill top-edge glow animation */
-  @keyframes topEdgeGlow{ 0%,100%{opacity:.6;} }
-  /* Kill shimmer sweeps on all rows — saves many concurrent animations */
-  .p-shimmer{ animation:none !important; opacity:0; }
-  /* Slow down halo spin */
-  .halo::before{ animation-duration:20s !important; }
-  /* Simplify dome levitation */
+
+  /* ── Dome: simple vertical only, no rotate ── */
   @keyframes domeLevitate{
     0%,100%{transform:translateY(0);}
-    50%    {transform:translateY(-6px);}
+    50%    {transform:translateY(-5px);}
   }
-  /* Kill basmala breath — static text shadow */
-  .basmala{ animation:none !important; }
-  /* Kill banner sweep */
-  .date-banner-inner{ animation:none !important; opacity:0; }
-  /* Kill btn halo pulse */
-  .save-btn,.mobile-save-btn{ animation:none !important; }
-  /* Reduce backdrop-filter usage */
-  .tab-rail{ backdrop-filter:none; -webkit-backdrop-filter:none; }
+  /* Remove expensive multi-drop-shadow filter on dome */
+  .dome-svg{
+    filter:drop-shadow(0 0 14px rgba(212,168,50,.55)) drop-shadow(0 4px 8px rgba(0,0,0,.50)) !important;
+  }
+
+  /* ── Basmala: no animation, static shadow ── */
+  .basmala{
+    animation:none !important;
+    text-shadow:0 0 22px rgba(245,216,112,.45),0 2px 4px rgba(0,0,0,.9) !important;
+  }
+
+  /* ── Mosque name: no shimmer filter animation ── */
+  .mosque-name{
+    animation:heroEntryName .7s cubic-bezier(.22,1,.36,1) .1s both !important;
+    filter:none !important;
+  }
+
+  /* ── Tab rail: remove backdrop-filter (most expensive mobile op) ── */
+  .tab-rail{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    background:rgba(1,4,2,.97) !important;
+  }
+
+  /* ── Mobile save bar: remove backdrop-filter ── */
+  .mobile-save-bar{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    background:rgba(1,4,2,.98) !important;
+  }
+
+  /* ── Panel reveal: simpler ── */
+  @keyframes panelReveal{from{opacity:0;}to{opacity:1;}}
+
+  /* ── Date banner: kill sweep animation ── */
+  .date-banner-inner{ display:none !important; }
+
+  /* ── Prayer card entry: simpler ── */
+  @keyframes cardSlideIn{from{opacity:0;}to{opacity:1;}}
+
+  /* ── Highlighted badge ping: off ── */
+  .p-row.hl .p-badge::after{ animation:none !important; opacity:0; }
+
+  /* ── Shimmer sweeps: all off ── */
+  .p-shimmer{ display:none !important; }
+
+  /* ── p-row transitions: simplified ── */
+  .p-row{ transition:transform .15s ease !important; box-shadow:none !important; }
+  .p-row.hl{ box-shadow:none !important; }
+
+  /* ── timePulse on hl rows: off ── */
+  .p-row.hl .p-time{ animation:none !important; }
+
+  /* ══ ACTIVE .now ROW — strip everything heavy ══ */
+  .p-row.now{
+    animation:none !important;
+    will-change:auto !important;
+    box-shadow:0 0 0 2px rgba(253,238,160,.60),0 0 14px rgba(212,168,50,.22) !important;
+    transform:scale(1.010) !important;
+  }
+  /* nowBreath: opacity only, no box-shadow anim */
+  @keyframes nowBreath{ 0%,100%{opacity:.93;} 50%{opacity:1;} }
+  /* Apply it manually */
+  .p-row.now{ animation:nowBreath 2.5s ease-in-out infinite !important; }
+
+  /* Left stripe: static */
+  .p-row.now::before{
+    animation:none !important;
+    opacity:.9 !important;
+    box-shadow:none !important;
+  }
+  /* Top edge: static */
+  .p-row.now::after{ animation:none !important; opacity:.6 !important; }
+
+  /* Badge: no scale pulse, no box-shadow anim */
+  .p-row.now .p-badge{
+    animation:none !important;
+    box-shadow:0 0 12px rgba(253,238,160,.35) !important;
+  }
+  /* Ping rings: completely off */
+  .p-row.now .p-badge::after{ display:none !important; }
+  .now-ping2{ display:none !important; }
+
+  /* Name gold flow: off */
+  .p-row.now .p-name-bn{
+    animation:none !important;
+    background:linear-gradient(135deg,var(--Au6) 0%,var(--Au4) 100%) !important;
+    -webkit-background-clip:text !important;
+    -webkit-text-fill-color:transparent !important;
+    background-clip:text !important;
+    filter:none !important;
+  }
+
+  /* Time inferno: simple static shadow */
+  .p-row.now .p-time{
+    animation:none !important;
+    text-shadow:0 0 16px rgba(253,238,160,.70) !important;
+  }
+
+  /* waqt-lbl: no blur, no animation */
+  .waqt-lbl{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    animation:none !important;
+    opacity:.88;
+  }
+
+  /* Now shimmer: off */
+  .p-row.now .p-shimmer{ display:none !important; }
+
+  /* ── Buttons: no animation ── */
+  .save-btn{ animation:none !important; }
+  .mobile-save-btn{ animation:none !important; }
+  .save-btn span{ animation:none !important; background-position:0% !important; }
+
+  /* ── Visitor ring: off on mobile ── */
+  .visitor-icon-wrap::after{ display:none; }
+  .vcRing{ display:none; }
+
+  /* ── Countdown colons: simpler blink ── */
+  @keyframes colonBlink{ 0%,49%{opacity:1;} 50%,100%{opacity:.2;} }
 }
 </style>
 </head>
 <body>
 
-<!-- BG -->
-<div class="bg-atmo"></div>
-<div class="bg-geo"></div>
-<div class="bg-cali" aria-hidden="true"><span class="bg-cali-text">الله</span></div>
-<div class="bg-cali2" aria-hidden="true">محمد</div>
-<div class="bg-vig"></div>
-<div class="dust" id="dust" aria-hidden="true"></div>
+<!-- BG: Islamic mosque scene (single SVG layer, no JS) -->
+<div class="bg-mosque" aria-hidden="true"></div>
+<div class="bg-geo"    aria-hidden="true"></div>
+<div class="bg-cali"   aria-hidden="true"><span class="bg-cali-text">الله</span></div>
+<div class="bg-cali2"  aria-hidden="true">محمد</div>
+<div class="bg-vig"    aria-hidden="true"></div>
+
+<!-- FLOATING DUST — pure CSS opacity dots, hardcoded positions, zero JS -->
+<!-- 8 mobile dots (always visible) + 12 desktop-only dots -->
+<div class="dust" aria-hidden="true">
+  <!-- mobile + desktop -->
+  <div class="d" style="width:2px;height:2px;left:8%;top:12%;animation-duration:4.2s;animation-delay:0s;"></div>
+  <div class="d" style="width:3px;height:3px;left:22%;top:34%;animation-duration:6.5s;animation-delay:-2.1s;"></div>
+  <div class="d" style="width:2px;height:2px;left:45%;top:8%;animation-duration:5.1s;animation-delay:-1.3s;"></div>
+  <div class="d" style="width:2px;height:2px;left:68%;top:22%;animation-duration:7.3s;animation-delay:-3.8s;"></div>
+  <div class="d" style="width:3px;height:3px;left:80%;top:55%;animation-duration:4.8s;animation-delay:-0.7s;"></div>
+  <div class="d" style="width:2px;height:2px;left:55%;top:72%;animation-duration:6.1s;animation-delay:-4.2s;"></div>
+  <div class="d" style="width:2px;height:2px;left:15%;top:65%;animation-duration:5.6s;animation-delay:-1.9s;"></div>
+  <div class="d" style="width:3px;height:3px;left:36%;top:48%;animation-duration:8.0s;animation-delay:-3.1s;"></div>
+  <!-- desktop only -->
+  <div class="d d-desk" style="width:2px;height:2px;left:92%;top:18%;animation-duration:5.4s;animation-delay:-2.6s;"></div>
+  <div class="d d-desk" style="width:2px;height:2px;left:3%;top:44%;animation-duration:7.7s;animation-delay:-0.4s;"></div>
+  <div class="d d-desk" style="width:3px;height:3px;left:74%;top:82%;animation-duration:4.5s;animation-delay:-5.1s;"></div>
+  <div class="d d-desk" style="width:2px;height:2px;left:29%;top:88%;animation-duration:6.8s;animation-delay:-1.6s;"></div>
+  <div class="d d-desk" style="width:2px;height:2px;left:61%;top:40%;animation-duration:5.9s;animation-delay:-3.5s;"></div>
+  <div class="d d-desk" style="width:3px;height:3px;left:88%;top:66%;animation-duration:7.1s;animation-delay:-0.9s;"></div>
+  <div class="d d-desk" style="width:2px;height:2px;left:48%;top:28%;animation-duration:4.3s;animation-delay:-2.8s;"></div>
+  <div class="d d-desk" style="width:2px;height:2px;left:12%;top:78%;animation-duration:6.3s;animation-delay:-4.7s;"></div>
+  <div class="d d-desk" style="width:3px;height:3px;left:95%;top:42%;animation-duration:5.2s;animation-delay:-1.1s;"></div>
+  <div class="d d-desk" style="width:2px;height:2px;left:40%;top:92%;animation-duration:8.2s;animation-delay:-2.3s;"></div>
+  <div class="d d-desk" style="width:2px;height:2px;left:77%;top:10%;animation-duration:4.9s;animation-delay:-3.9s;"></div>
+  <div class="d d-desk" style="width:3px;height:3px;left:58%;top:58%;animation-duration:6.6s;animation-delay:-0.5s;"></div>
+</div>
 
 <!-- CROWN -->
 <div class="crown" aria-hidden="true">
@@ -1471,8 +1620,10 @@ function markActiveWaqt(){
   /* Continuous embers on active card */
   clearInterval(_emberTimer);
   const activeRow=document.querySelector(`.p-row[data-key="${activeKey}"]`);
-  if(activeRow && !('ontouchstart' in window)){
-    _emberTimer=setInterval(()=>spawnEmbers(activeRow),1000);
+  /* Embers: desktop only */
+  const isMob=('ontouchstart' in window)||window.innerWidth<=600;
+  if(activeRow && !isMob){
+    _emberTimer=setInterval(()=>spawnEmbers(activeRow),1200);
   }
 }
 
@@ -1497,40 +1648,22 @@ function spawnEmbers(row){
   }
 }
 
-/* Run on load, then every minute */
+/* Run on load, then every 30s (was 60s but active waqt only changes ~6x/day) */
 markActiveWaqt();
-setInterval(markActiveWaqt, 60000);
+setInterval(markActiveWaqt, 30000);
 
-/* Re-detect whenever DOM times change (Firebase listener triggers this) */
-const _timeObs=new MutationObserver(()=>{ setTimeout(markActiveWaqt,100); });
+/* Re-detect whenever DOM times change — debounced */
+let _mobsTimer=null;
+const _timeObs=new MutationObserver(()=>{
+  clearTimeout(_mobsTimer);
+  _mobsTimer=setTimeout(markActiveWaqt,200);
+});
 WAQT_KEYS.forEach(k=>{
   const el=document.getElementById("t-"+k);
   if(el) _timeObs.observe(el,{childList:true,characterData:true,subtree:true});
 });
 
-/* ═══════════════════════════════════════
-   SPARK DUST ONLY — ultra-light, mobile safe
-═══════════════════════════════════════ */
-(function spawnAllFloaters(){
-  const D=document.getElementById("dust");
-  if(!D) return;
-  const mob = ('ontouchstart' in window) || window.innerWidth <= 600;
-  /* Only spawn tiny spark dots — pure opacity animation, zero GPU cost */
-  const n = mob ? 18 : 40;
-  for(let i=0;i<n;i++){
-    const m=document.createElement("div"); m.className="mote-star";
-    const sz=Math.random()<.3?3:2;
-    const dur=3+Math.random()*7;
-    m.style.cssText=
-      `width:${sz}px;height:${sz}px;`+
-      `left:${Math.random()*100}%;`+
-      `top:${Math.random()*100}%;`+
-      `animation-duration:${dur}s;`+
-      `animation-delay:-${Math.random()*dur}s;`+
-      `opacity:${.3+Math.random()*.6};`;
-    D.appendChild(m);
-  }
-})();
+/* Dust is now pure CSS — no JS spawn needed */
 
 /* ═══════════════════════════════════════
    TOUCH RIPPLE
@@ -1649,13 +1782,15 @@ setTimeout(()=>{refreshDates();setInterval(refreshDates,86400000);},new Date().s
     render("sehri", getTarget("sehri"));
   }
 
-  /* Tick immediately, then align to exact second boundary */
+
+  /* rAF-based tick: syncs to display refresh, no drift, smooth seconds */
   tickAll();
-  const msToNextSec = 1000 - (Date.now()%1000);
-  setTimeout(()=>{
-    tickAll();
-    setInterval(tickAll, 1000);
-  }, msToNextSec);
+  let _lastSec=-1;
+  (function rafTick(){
+    const s=Math.floor(Date.now()/1000);
+    if(s!==_lastSec){_lastSec=s;tickAll();}
+    requestAnimationFrame(rafTick);
+  })();
 
   /* Re-tick when Firebase updates prayer times */
   const obs = new MutationObserver(()=>{ tickAll(); });
