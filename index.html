@@ -79,90 +79,27 @@ body{
 }
 
 /* ══════════════════════════════════════════════════
-   FLOATING PARTICLES — lightweight mobile-first
+   FLOATING PARTICLES — spark dust only (mobile-safe)
+   Only opacity animations — zero transform cost
 ══════════════════════════════════════════════════ */
 .dust{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
 
-/* A — Rising gold orbs: opacity-only fade on mobile, translateY on desktop */
-.mote{
-  position:absolute;border-radius:50%;
-  background:radial-gradient(circle at 40% 35%,rgba(253,238,160,.75),rgba(212,168,50,.20) 60%,transparent 80%);
-  will-change:transform,opacity;
-  animation:floatOrb linear infinite;
-}
-@keyframes floatOrb{
-  0%  {transform:translateY(105vh) translateX(0); opacity:0;}
-  8%  {opacity:.7;}
-  92% {opacity:.3;}
-  100%{transform:translateY(-6vh) translateX(var(--dx)); opacity:0;}
-}
-
-/* B — Twinkling stars: pure opacity only — cheapest possible */
+/* Only class kept: tiny spark dust — pure opacity fade, no movement */
 .mote-star{
-  position:absolute;width:2px;height:2px;border-radius:50%;
-  background:rgba(253,238,160,.85);
+  position:absolute;
+  width:2px;height:2px;border-radius:50%;
+  background:rgba(253,238,160,.90);
   will-change:opacity;
-  animation:twinkleStar ease-in-out infinite;
+  animation:sparkFade ease-in-out infinite;
 }
-@keyframes twinkleStar{
+@keyframes sparkFade{
   0%,100%{opacity:0;}
   50%    {opacity:1;}
 }
 
-/* C — Streaks: REMOVED on mobile, simple fade on desktop */
-.mote-streak{
-  position:absolute;height:1px;border-radius:4px;
-  background:linear-gradient(90deg,transparent,rgba(245,216,112,.50),transparent);
-  will-change:opacity;
-  animation:streakFade ease-in-out infinite;
-}
-@keyframes streakFade{
-  0%,100%{opacity:0;}
-  50%    {opacity:.45;}
-}
-
-/* D — Emerald glows: pure opacity pulse, no movement, no blur */
-.mote-glow{
-  position:absolute;border-radius:50%;
-  background:radial-gradient(circle,rgba(21,156,94,.15),transparent 70%);
-  will-change:opacity;
-  animation:glowPulse ease-in-out infinite;
-}
-@keyframes glowPulse{
-  0%,100%{opacity:.12;}
-  50%    {opacity:.32;}
-}
-
-/* E — Star polygons: slow rise only */
-.mote-poly{
-  position:absolute;
-  background:rgba(245,216,112,.55);
-  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-  will-change:transform,opacity;
-  animation:polyRise linear infinite;
-}
-@keyframes polyRise{
-  0%  {transform:translateY(104vh); opacity:0;}
-  10% {opacity:.65;}
-  90% {opacity:.15;}
-  100%{transform:translateY(-6vh); opacity:0;}
-}
-
-/* F — Crescents: gentle fade only */
-.mote-crescent{
-  position:absolute;border-radius:50%;
-  border:1.5px solid rgba(245,216,112,.35);
-  will-change:opacity;
-  animation:crescentFade ease-in-out infinite;
-}
-@keyframes crescentFade{
-  0%,100%{opacity:.15;}
-  50%    {opacity:.45;}
-}
-
-/* Mobile override: pause streaks entirely to save GPU */
+/* Mobile override: remove streaks/orbs/glows entirely */
 @media(max-width:600px){
-  .mote-streak{ animation:none; display:none; }
+  .mote,.mote-streak,.mote-glow,.mote-poly,.mote-crescent{ display:none!important; }
 }
 
 /* ══════════════════════════════════════════════════
@@ -661,128 +598,108 @@ body{
   border-radius:var(--r3);
   margin-bottom:12px;
   overflow:hidden;
-  box-shadow:
-    var(--sh2),
-    0 0 0 1px rgba(212,168,50,.14),
-    0 0 50px rgba(14,92,56,.20),
-    inset 0 1px 0 rgba(212,168,50,.18);
-  padding:22px 14px 20px;
+  box-shadow:var(--sh2),0 0 0 1px rgba(212,168,50,.14),0 0 50px rgba(14,92,56,.20),inset 0 1px 0 rgba(212,168,50,.18);
+  padding:16px 10px 14px;
 }
-/* top gold bar */
 .countdown-panel::before{
   content:'';position:absolute;top:0;left:0;right:0;height:3px;
   background:linear-gradient(90deg,transparent 0%,var(--Au3) 20%,var(--Au6) 50%,var(--Au3) 80%,transparent 100%);
 }
-/* bottom gold bar */
 .countdown-panel::after{
   content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
   background:linear-gradient(90deg,transparent 0%,var(--rim2) 40%,var(--rim3) 50%,var(--rim2) 60%,transparent 100%);
 }
-/* corner ornaments via pseudo on inner wrapper */
-.cdp-corner{position:absolute;width:22px;height:22px;pointer-events:none;}
-.cdp-corner.tl{top:6px;left:6px;border-top:1px solid var(--rim3);border-left:1px solid var(--rim3);border-radius:4px 0 0 0;}
-.cdp-corner.tr{top:6px;right:6px;border-top:1px solid var(--rim3);border-right:1px solid var(--rim3);border-radius:0 4px 0 0;}
-.cdp-corner.bl{bottom:6px;left:6px;border-bottom:1px solid var(--rim2);border-left:1px solid var(--rim2);border-radius:0 0 0 4px;}
-.cdp-corner.br{bottom:6px;right:6px;border-bottom:1px solid var(--rim2);border-right:1px solid var(--rim2);border-radius:0 0 4px 0;}
-
+.cdp-corner{position:absolute;width:18px;height:18px;pointer-events:none;}
+.cdp-corner.tl{top:5px;left:5px;border-top:1px solid var(--rim3);border-left:1px solid var(--rim3);border-radius:4px 0 0 0;}
+.cdp-corner.tr{top:5px;right:5px;border-top:1px solid var(--rim3);border-right:1px solid var(--rim3);border-radius:0 4px 0 0;}
+.cdp-corner.bl{bottom:5px;left:5px;border-bottom:1px solid var(--rim2);border-left:1px solid var(--rim2);border-radius:0 0 0 4px;}
+.cdp-corner.br{bottom:5px;right:5px;border-bottom:1px solid var(--rim2);border-right:1px solid var(--rim2);border-radius:0 0 4px 0;}
 .cdp-header{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  margin-bottom:18px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-bottom:12px;
+  flex-wrap:wrap;
 }
 .cdp-title{
   font-family:'Aref Ruqaa Ink',serif;
-  font-size:clamp(.85rem,4vw,1.05rem);
-  letter-spacing:3px;
+  font-size:clamp(.72rem,3.2vw,.92rem);
+  letter-spacing:2px;
   background:linear-gradient(135deg,var(--Au4),var(--Au6),var(--Au4));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  font-weight:700;
+  font-weight:700;white-space:nowrap;
 }
 .cdp-gem{
-  width:8px;height:8px;background:var(--Au4);
-  transform:rotate(45deg);box-shadow:0 0 12px var(--Au4),0 0 24px rgba(212,168,50,.4);
+  width:7px;height:7px;background:var(--Au4);
+  transform:rotate(45deg);box-shadow:0 0 10px var(--Au4),0 0 20px rgba(212,168,50,.4);
   flex-shrink:0;
 }
-.cdp-star{
-  font-size:.9rem;color:var(--Au4);opacity:.7;flex-shrink:0;
-}
+.cdp-star{font-size:.8rem;color:var(--Au4);opacity:.7;flex-shrink:0;}
 
-/* two-column grid */
-.cdp-grid{display:grid;grid-template-columns:1fr 1px 1fr;gap:0;}
-.cdp-sep{
-  background:linear-gradient(180deg,transparent 0%,var(--rim3) 30%,var(--rim3) 70%,transparent 100%);
-  margin:8px 0;
-}
-
-/* each side card */
-.cdp-item{
-  text-align:center;
-  padding:8px 10px 12px;
-  position:relative;
-}
+.cdp-grid{display:grid;grid-template-columns:1fr 1px 1fr;}
+.cdp-sep{background:linear-gradient(180deg,transparent 0%,var(--rim3) 30%,var(--rim3) 70%,transparent 100%);margin:4px 0;}
+.cdp-item{text-align:center;padding:4px 6px 8px;position:relative;}
 .cdp-label{
   font-family:'Hind Siliguri',sans-serif;
-  font-size:.62rem;letter-spacing:1.8px;text-transform:uppercase;
-  font-weight:700;margin-bottom:10px;
-  display:flex;align-items:center;justify-content:center;gap:6px;
+  font-size:clamp(.52rem,2.4vw,.65rem);
+  letter-spacing:1.4px;text-transform:uppercase;
+  font-weight:700;margin-bottom:8px;
+  display:flex;align-items:center;justify-content:center;gap:4px;
 }
-.cdp-item.iftar .cdp-label{ color:var(--Au5); }
-.cdp-item.sehri .cdp-label{ color:#7de8c0; }
+.cdp-item.iftar .cdp-label{color:var(--Au5);}
+.cdp-item.sehri .cdp-label{color:#7de8c0;}
 
-/* digit boxes */
-.cdp-time-wrap{
-  display:flex;align-items:stretch;justify-content:center;gap:4px;
-}
-.cdp-digit-box{
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-}
+.cdp-time-wrap{display:flex;align-items:stretch;justify-content:center;gap:3px;}
+.cdp-digit-box{display:flex;flex-direction:column;align-items:center;gap:2px;}
+
+/* RESPONSIVE digit sizes */
 .cdp-hh,.cdp-mm,.cdp-ss{
   font-family:'Aref Ruqaa Ink',serif;
-  font-size:clamp(1.9rem,8.5vw,2.6rem);
+  font-size:clamp(1.45rem,6.5vw,2.2rem);
   font-weight:700;
   line-height:1;
-  min-width:2.1ch;text-align:center;
+  min-width:2ch;text-align:center;
   display:block;
-  border-radius:8px;
-  padding:6px 8px 4px;
+  border-radius:6px;
+  padding:5px 6px 3px;
 }
 .cdp-item.iftar .cdp-hh,
 .cdp-item.iftar .cdp-mm,
 .cdp-item.iftar .cdp-ss{
   color:var(--Au7);
-  text-shadow:0 0 22px rgba(245,216,112,.80),0 0 44px rgba(212,168,50,.40);
+  text-shadow:0 0 18px rgba(245,216,112,.75),0 0 36px rgba(212,168,50,.35);
   background:rgba(212,168,50,.08);
   border:1px solid rgba(212,168,50,.22);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 12px rgba(0,0,0,.4);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 10px rgba(0,0,0,.4);
 }
 .cdp-item.sehri .cdp-hh,
 .cdp-item.sehri .cdp-mm,
 .cdp-item.sehri .cdp-ss{
   color:#b8fce0;
-  text-shadow:0 0 20px rgba(125,232,192,.75),0 0 40px rgba(79,201,154,.35);
+  text-shadow:0 0 16px rgba(125,232,192,.70),0 0 32px rgba(79,201,154,.30);
   background:rgba(21,156,94,.10);
   border:1px solid rgba(79,201,154,.25);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 12px rgba(0,0,0,.4);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 10px rgba(0,0,0,.4);
 }
 .cdp-digit-lbl{
   font-family:'Hind Siliguri',sans-serif;
-  font-size:.46rem;letter-spacing:1.2px;text-transform:uppercase;
+  font-size:clamp(.38rem,1.5vw,.46rem);
+  letter-spacing:.8px;text-transform:uppercase;
   color:var(--ash);font-weight:700;
 }
 .cdp-colon{
   font-family:'Aref Ruqaa Ink',serif;
-  font-size:clamp(1.5rem,7vw,2.2rem);
+  font-size:clamp(1.1rem,5vw,1.8rem);
   color:var(--Au3);line-height:1;
   align-self:center;padding-bottom:14px;
   animation:colonBlink 1s step-end infinite;
 }
 .cdp-item.sehri .cdp-colon{color:#4fc99a;}
 @keyframes colonBlink{0%,100%{opacity:1;}50%{opacity:.15;}}
-
 .cdp-sublabel{
   font-family:'Tiro Bangla',serif;
-  font-size:clamp(.60rem,2.8vw,.72rem);
-  margin-top:10px;letter-spacing:.4px;
-  padding:4px 8px;border-radius:20px;display:inline-block;
+  font-size:clamp(.52rem,2.4vw,.66rem);
+  margin-top:8px;letter-spacing:.3px;
+  padding:3px 6px;border-radius:16px;display:inline-block;
+  line-height:1.4;
 }
 .cdp-item.iftar .cdp-sublabel{
   color:rgba(245,216,112,.80);
@@ -794,16 +711,16 @@ body{
 }
 .cdp-done{
   font-family:'Tiro Bangla',serif;
-  font-size:clamp(.82rem,3.8vw,1rem);
+  font-size:clamp(.78rem,3.5vw,.95rem);
   color:var(--Au5);text-shadow:0 0 14px rgba(245,216,112,.6);padding:4px 0;
 }
 
 /* ══════════════════════════════════════════════════
-   VISITOR COUNTER — ULTRA ISLAMIC DESIGN
+   VISITOR COUNTER — compact Islamic design
 ══════════════════════════════════════════════════ */
 .visitor-footer{
   text-align:center;
-  padding:6px 0 16px;
+  padding:4px 0 12px;
   user-select:none;
 }
 .visitor-card{
@@ -812,118 +729,125 @@ body{
   width:100%;
   background:linear-gradient(160deg,rgba(10,28,14,.97) 0%,rgba(7,18,9,.98) 60%,rgba(12,32,16,.97) 100%);
   border:1px solid var(--rim2);
-  border-radius:var(--r3);
+  border-radius:var(--r2);
   overflow:hidden;
-  padding:20px 16px 18px;
-  box-shadow:
-    0 8px 32px rgba(0,0,0,.55),
-    0 0 0 1px rgba(212,168,50,.10),
-    0 0 40px rgba(14,92,56,.15),
-    inset 0 1px 0 rgba(212,168,50,.15);
+  padding:13px 14px 11px;
+  box-shadow:0 6px 24px rgba(0,0,0,.50),0 0 0 1px rgba(212,168,50,.10),inset 0 1px 0 rgba(212,168,50,.12);
 }
-/* top shimmer bar */
 .visitor-card::before{
   content:'';position:absolute;top:0;left:0;right:0;height:2px;
   background:linear-gradient(90deg,transparent,var(--Au3),var(--Au5),var(--Au3),transparent);
 }
-/* bottom rim */
 .visitor-card::after{
   content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
   background:linear-gradient(90deg,transparent,var(--rim2),transparent);
 }
-/* Islamic geo SVG background watermark */
 .visitor-geo{
   position:absolute;inset:0;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='none' stroke='%23d4a832' stroke-opacity='.06'%3E%3Cpolygon points='60,5 73,40 108,40 80,62 91,97 60,75 29,97 40,62 12,40 47,40' stroke-width='1'/%3E%3Ccircle cx='60' cy='60' r='42' stroke-width='.6'/%3E%3Ccircle cx='60' cy='60' r='26' stroke-width='.4'/%3E%3C/g%3E%3C/svg%3E");
-  background-size:120px 120px;
-  background-position:center;
-  opacity:1;
+  background-size:120px 120px;background-position:center;
 }
-/* corner ornaments */
-.visitor-card .cdp-corner.tl{top:5px;left:5px;}
-.visitor-card .cdp-corner.tr{top:5px;right:5px;}
-.visitor-card .cdp-corner.bl{bottom:5px;left:5px;}
-.visitor-card .cdp-corner.br{bottom:5px;right:5px;}
-
+.visitor-card .cdp-corner.tl{top:4px;left:4px;}
+.visitor-card .cdp-corner.tr{top:4px;right:4px;}
+.visitor-card .cdp-corner.bl{bottom:4px;left:4px;}
+.visitor-card .cdp-corner.br{bottom:4px;right:4px;}
 .visitor-arabic{
   font-family:'Noto Naskh Arabic',serif;
-  font-size:clamp(.95rem,4.5vw,1.15rem);
-  color:rgba(212,168,50,.45);
-  display:block;text-align:center;
-  direction:rtl;letter-spacing:2px;
-  margin-bottom:6px;
+  font-size:clamp(.78rem,3.5vw,.92rem);
+  color:rgba(212,168,50,.42);
+  display:block;text-align:center;direction:rtl;letter-spacing:1px;
+  margin-bottom:5px;
 }
 .visitor-title-row{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  margin-bottom:14px;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  margin-bottom:10px;
 }
-.visitor-gem{
-  width:7px;height:7px;background:var(--jade3);
-  transform:rotate(45deg);
-  box-shadow:0 0 10px rgba(21,156,94,.8);
-  flex-shrink:0;
-}
-.visitor-title{
-  font-family:'Hind Siliguri',sans-serif;
-  font-size:.62rem;letter-spacing:2px;text-transform:uppercase;
-  color:var(--mist);font-weight:700;
-}
-.visitor-number-wrap{
-  display:flex;align-items:center;justify-content:center;gap:14px;
-  margin-bottom:12px;
-}
+.visitor-gem{width:6px;height:6px;background:var(--jade3);transform:rotate(45deg);box-shadow:0 0 8px rgba(21,156,94,.8);flex-shrink:0;}
+.visitor-title{font-family:'Hind Siliguri',sans-serif;font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--mist);font-weight:700;}
+.visitor-number-wrap{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px;}
 .visitor-icon-wrap{
-  width:52px;height:52px;border-radius:50%;
-  background:radial-gradient(circle at 35% 35%,rgba(21,156,94,.22),rgba(14,92,56,.08) 70%);
-  border:1px solid rgba(21,156,94,.30);
-  box-shadow:0 0 20px rgba(21,156,94,.20),inset 0 1px 0 rgba(255,255,255,.06);
+  width:42px;height:42px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,rgba(21,156,94,.20),rgba(14,92,56,.06) 70%);
+  border:1px solid rgba(21,156,94,.28);
+  box-shadow:0 0 16px rgba(21,156,94,.18),inset 0 1px 0 rgba(255,255,255,.05);
   display:flex;align-items:center;justify-content:center;
-  font-size:1.6rem;flex-shrink:0;
-  position:relative;
+  font-size:1.35rem;flex-shrink:0;position:relative;
 }
 .visitor-icon-wrap::after{
-  content:'';position:absolute;inset:-5px;border-radius:50%;
-  border:1px solid rgba(21,156,94,.22);
+  content:'';position:absolute;inset:-4px;border-radius:50%;
+  border:1px solid rgba(21,156,94,.20);
   animation:vcRing 2.4s ease-out infinite;
 }
-@keyframes vcRing{0%{transform:scale(1);opacity:.6;}100%{transform:scale(1.5);opacity:0;}}
+@keyframes vcRing{0%{transform:scale(1);opacity:.5;}100%{transform:scale(1.5);opacity:0;}}
 .visitor-num-col{text-align:left;}
 .visitor-count{
   font-family:'Aref Ruqaa Ink',serif;
-  font-size:clamp(2.2rem,10vw,3rem);
+  font-size:clamp(1.7rem,8vw,2.3rem);
   font-weight:700;
   background:linear-gradient(135deg,var(--Au5) 0%,var(--Au7) 45%,var(--Au4) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   line-height:1;display:block;
-  filter:drop-shadow(0 0 12px rgba(212,168,50,.50));
+  filter:drop-shadow(0 0 10px rgba(212,168,50,.45));
 }
-.visitor-unit{
-  font-family:'Tiro Bangla',serif;
-  font-size:.68rem;color:var(--mist);letter-spacing:.8px;
-  margin-top:2px;display:block;
-}
-/* live pulse dot row */
+.visitor-unit{font-family:'Tiro Bangla',serif;font-size:.62rem;color:var(--mist);letter-spacing:.6px;margin-top:2px;display:block;}
 .visitor-live-row{
-  display:flex;align-items:center;justify-content:center;gap:7px;
-  padding-top:10px;
-  border-top:1px solid rgba(212,168,50,.10);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding-top:8px;border-top:1px solid rgba(212,168,50,.10);
 }
 .visitor-dot{
-  width:7px;height:7px;border-radius:50%;
+  width:6px;height:6px;border-radius:50%;
   background:var(--jade3);
-  box-shadow:0 0 8px rgba(21,156,94,.9),0 0 16px rgba(21,156,94,.4);
-  animation:livePulse 1.2s ease-in-out infinite alternate;
-  flex-shrink:0;
+  box-shadow:0 0 7px rgba(21,156,94,.9),0 0 14px rgba(21,156,94,.4);
+  animation:livePulse 1.2s ease-in-out infinite alternate;flex-shrink:0;
 }
-.visitor-live-txt{
-  font-family:'Hind Siliguri',sans-serif;
-  font-size:.58rem;letter-spacing:1.4px;text-transform:uppercase;
-  color:rgba(80,220,140,.75);font-weight:700;
+.visitor-live-txt{font-family:'Hind Siliguri',sans-serif;font-size:.56rem;letter-spacing:1.2px;text-transform:uppercase;color:rgba(80,220,140,.70);font-weight:700;}
+.visitor-live-count{margin-left:auto;font-family:'Hind Siliguri',sans-serif;font-size:.50rem;color:var(--ash);letter-spacing:.6px;}
+
+/* ══════════════════════════════════════════════════
+   ISLAMIC SPEECH FOOTER
+══════════════════════════════════════════════════ */
+.islamic-footer{
+  position:relative;
+  margin:10px 0 6px;
+  padding:18px 14px 16px;
+  text-align:center;
+  background:linear-gradient(160deg,rgba(8,22,10,.95) 0%,rgba(5,14,7,.98) 100%);
+  border:1px solid var(--rim1);
+  border-radius:var(--r2);
+  overflow:hidden;
 }
-.visitor-live-count{
-  margin-left:auto;
-  font-family:'Hind Siliguri',sans-serif;
-  font-size:.55rem;color:var(--ash);letter-spacing:.8px;
+.islamic-footer::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--Au2),var(--Au4),var(--Au2),transparent);
+  opacity:.6;
+}
+.islamic-footer::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--rim1),transparent);
+}
+.isf-top-orn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-bottom:12px;
+}
+.isf-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--rim2),transparent);}
+.isf-diamond{width:6px;height:6px;background:var(--Au3);transform:rotate(45deg);box-shadow:0 0 8px var(--Au3);flex-shrink:0;}
+.isf-speech{
+  font-family:'Aref Ruqaa Ink',serif;
+  font-size:clamp(1rem,4.5vw,1.3rem);
+  font-weight:700;
+  line-height:1.75;
+  letter-spacing:.5px;
+  background:linear-gradient(160deg,var(--Au6) 0%,var(--Au4) 50%,var(--Au5) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 10px rgba(212,168,50,.25));
+  display:block;margin-bottom:8px;
+}
+.isf-source{
+  font-family:'Tiro Bangla',serif;
+  font-size:clamp(.56rem,2.5vw,.68rem);
+  color:var(--mist);letter-spacing:.6px;
+  font-style:italic;
+  display:block;margin-top:4px;
 }
 
 /* visitor footer CSS now above */
@@ -1275,10 +1199,48 @@ body{
         <span class="visitor-live-count">Firebase Realtime DB</span>
       </div>
     </div>
+  <!-- ISLAMIC SPEECH FOOTER -->
+  <div class="islamic-footer" role="contentinfo">
+    <div class="isf-top-orn">
+      <div class="isf-line"></div>
+      <div class="isf-diamond"></div>
+      <div class="isf-line"></div>
+    </div>
+    <span class="isf-speech">
+      "নামাজ হলো মুমিনের মিরাজ —<br>
+      প্রতিটি সিজদায় আল্লাহর সান্নিধ্য পাওয়া যায়।"
+    </span>
+    <span class="isf-source">— হাদিস শরিফ</span>
+
+    <div class="isf-top-orn" style="margin-top:14px;margin-bottom:12px;">
+      <div class="isf-line"></div>
+      <div class="isf-diamond"></div>
+      <div class="isf-line"></div>
+    </div>
+    <span class="isf-speech">
+      "যে ব্যক্তি ফজরের নামাজ পড়ে,<br>
+      সে আল্লাহর জিম্মায় থাকে।"
+    </span>
+    <span class="isf-source">— সহিহ মুসলিম</span>
+
+    <div class="isf-top-orn" style="margin-top:14px;margin-bottom:12px;">
+      <div class="isf-line"></div>
+      <div class="isf-diamond"></div>
+      <div class="isf-line"></div>
+    </div>
+    <span class="isf-speech">
+      "ইফতারের সময় রোজাদারের দোয়া<br>
+      কখনো বৃথা যায় না।"
+    </span>
+    <span class="isf-source">— তিরমিজি শরিফ</span>
+
+    <div class="isf-top-orn" style="margin-top:14px;margin-bottom:0;">
+      <div class="isf-line"></div>
+      <div class="isf-diamond"></div>
+      <div class="isf-line"></div>
+    </div>
   </div>
 </div>
-
-<!-- MOBILE BOTTOM SAVE BAR -->
 <div class="mobile-save-bar" id="mobile-bar" style="display:none;">
   <button class="mobile-save-btn" onclick="save()">✦ &nbsp; সংরক্ষণ করুন &nbsp; ✦</button>
 </div>
@@ -1547,78 +1509,25 @@ WAQT_KEYS.forEach(k=>{
 });
 
 /* ═══════════════════════════════════════
-   FLOATING BACKGROUND — mobile-first lean
+   SPARK DUST ONLY — ultra-light, mobile safe
 ═══════════════════════════════════════ */
 (function spawnAllFloaters(){
   const D=document.getElementById("dust");
   if(!D) return;
   const mob = ('ontouchstart' in window) || window.innerWidth <= 600;
-
-  /* A — Gold orbs: 7 mob / 16 desktop */
-  const orbN = mob ? 7 : 16;
-  for(let i=0;i<orbN;i++){
-    const m=document.createElement("div"); m.className="mote";
-    const sz=3+Math.random()*6, dur=18+Math.random()*18, dx=(Math.random()-.5)*80;
-    m.style.cssText=`width:${sz}px;height:${sz}px;left:${3+Math.random()*94}%;`+
-      `--dx:${dx}px;animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;`+
-      `opacity:${.20+Math.random()*.25};`;
-    D.appendChild(m);
-  }
-
-  /* B — Stars: 10 mob / 20 desktop */
-  const starN = mob ? 10 : 20;
-  for(let i=0;i<starN;i++){
+  /* Only spawn tiny spark dots — pure opacity animation, zero GPU cost */
+  const n = mob ? 18 : 40;
+  for(let i=0;i<n;i++){
     const m=document.createElement("div"); m.className="mote-star";
-    const dur=4+Math.random()*6;
-    m.style.cssText=`left:${1+Math.random()*98}%;top:${Math.random()*92}%;`+
-      `animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;`+
-      `opacity:${.40+Math.random()*.45};`;
-    D.appendChild(m);
-  }
-
-  /* C — Streaks: 0 mob / 7 desktop */
-  if(!mob){
-    for(let i=0;i<7;i++){
-      const m=document.createElement("div"); m.className="mote-streak";
-      const w=30+Math.random()*55, dur=12+Math.random()*12;
-      m.style.cssText=`width:${w}px;top:${Math.random()*90}%;left:${Math.random()*80}%;`+
-        `animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;opacity:.30;`;
-      D.appendChild(m);
-    }
-  }
-
-  /* D — Glows: 2 mob / 5 desktop */
-  const glowN = mob ? 2 : 5;
-  for(let i=0;i<glowN;i++){
-    const m=document.createElement("div"); m.className="mote-glow";
-    const sz=70+Math.random()*90, dur=12+Math.random()*10;
-    m.style.cssText=`width:${sz}px;height:${sz}px;`+
-      `left:${Math.random()*85}%;top:${Math.random()*85}%;`+
-      `animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;`;
-    D.appendChild(m);
-  }
-
-  /* E — Polygons: 3 mob / 7 desktop */
-  const polyN = mob ? 3 : 7;
-  for(let i=0;i<polyN;i++){
-    const m=document.createElement("div"); m.className="mote-poly";
-    const sz=4+Math.random()*5, dur=22+Math.random()*16;
-    m.style.cssText=`width:${sz}px;height:${sz}px;`+
-      `left:${4+Math.random()*92}%;`+
-      `animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;`+
-      `opacity:${.22+Math.random()*.35};`;
-    D.appendChild(m);
-  }
-
-  /* F — Crescents: 2 mob / 5 desktop */
-  const crN = mob ? 2 : 5;
-  for(let i=0;i<crN;i++){
-    const m=document.createElement("div"); m.className="mote-crescent";
-    const sz=6+Math.random()*10, dur=8+Math.random()*8;
-    m.style.cssText=`width:${sz}px;height:${sz}px;`+
-      `left:${3+Math.random()*94}%;top:${5+Math.random()*88}%;`+
-      `animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;`+
-      `opacity:${.15+Math.random()*.25};`;
+    const sz=Math.random()<.3?3:2;
+    const dur=3+Math.random()*7;
+    m.style.cssText=
+      `width:${sz}px;height:${sz}px;`+
+      `left:${Math.random()*100}%;`+
+      `top:${Math.random()*100}%;`+
+      `animation-duration:${dur}s;`+
+      `animation-delay:-${Math.random()*dur}s;`+
+      `opacity:${.3+Math.random()*.6};`;
     D.appendChild(m);
   }
 })();
