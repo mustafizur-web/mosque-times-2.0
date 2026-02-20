@@ -79,86 +79,90 @@ body{
 }
 
 /* ══════════════════════════════════════════════════
-   FLOATING PARTICLES — 5 rich types (JS-spawned)
+   FLOATING PARTICLES — lightweight mobile-first
 ══════════════════════════════════════════════════ */
 .dust{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
 
-/* A — Rising gold orbs */
+/* A — Rising gold orbs: opacity-only fade on mobile, translateY on desktop */
 .mote{
   position:absolute;border-radius:50%;
-  background:radial-gradient(circle at 38% 32%,rgba(253,238,160,.82),rgba(212,168,50,.28) 50%,transparent 80%);
-  box-shadow:0 0 8px rgba(212,168,50,.45);
+  background:radial-gradient(circle at 40% 35%,rgba(253,238,160,.75),rgba(212,168,50,.20) 60%,transparent 80%);
+  will-change:transform,opacity;
   animation:floatOrb linear infinite;
 }
 @keyframes floatOrb{
-  0%  {transform:translateY(105vh) translateX(0) scale(.12); opacity:0;}
-  8%  {opacity:1;}
-  50% {transform:translateY(50vh) translateX(var(--dx)) scale(1);}
-  92% {opacity:.4;}
-  100%{transform:translateY(-8vh) translateX(calc(var(--dx)*1.8)) scale(.25); opacity:0;}
+  0%  {transform:translateY(105vh) translateX(0); opacity:0;}
+  8%  {opacity:.7;}
+  92% {opacity:.3;}
+  100%{transform:translateY(-6vh) translateX(var(--dx)); opacity:0;}
 }
-/* B — Twinkling star sparks */
+
+/* B — Twinkling stars: pure opacity only — cheapest possible */
 .mote-star{
-  position:absolute;width:3px;height:3px;border-radius:50%;
-  background:#fdeea0;
-  box-shadow:0 0 5px 2px rgba(253,238,160,.72),0 0 10px rgba(212,168,50,.42);
+  position:absolute;width:2px;height:2px;border-radius:50%;
+  background:rgba(253,238,160,.85);
+  will-change:opacity;
   animation:twinkleStar ease-in-out infinite;
 }
 @keyframes twinkleStar{
-  0%   {opacity:0; transform:scale(.4) translateY(0);}
-  20%  {opacity:1; transform:scale(1.7) translateY(-6px);}
-  50%  {opacity:.5;transform:scale(.9) translateY(-20px);}
-  80%  {opacity:.9;transform:scale(1.4) translateY(-9px);}
-  100% {opacity:0; transform:scale(.4) translateY(-32px);}
+  0%,100%{opacity:0;}
+  50%    {opacity:1;}
 }
-/* C — Diagonal gold streaks */
+
+/* C — Streaks: REMOVED on mobile, simple fade on desktop */
 .mote-streak{
-  position:absolute;height:1.5px;border-radius:4px;
-  background:linear-gradient(90deg,transparent,rgba(245,216,112,.65),rgba(212,168,50,.42),transparent);
-  animation:driftStreak linear infinite;
+  position:absolute;height:1px;border-radius:4px;
+  background:linear-gradient(90deg,transparent,rgba(245,216,112,.50),transparent);
+  will-change:opacity;
+  animation:streakFade ease-in-out infinite;
 }
-@keyframes driftStreak{
-  0%  {transform:translateY(108vh) translateX(0) rotate(-28deg) scaleX(0); opacity:0;}
-  10% {opacity:.75;transform:translateY(94vh) translateX(calc(var(--dx)*.1)) rotate(-28deg) scaleX(1);}
-  90% {opacity:.18;}
-  100%{transform:translateY(-10vh) translateX(var(--dx)) rotate(-28deg) scaleX(.4); opacity:0;}
+@keyframes streakFade{
+  0%,100%{opacity:0;}
+  50%    {opacity:.45;}
 }
-/* D — Slow large emerald atmospheric glows */
+
+/* D — Emerald glows: pure opacity pulse, no movement, no blur */
 .mote-glow{
   position:absolute;border-radius:50%;
-  background:radial-gradient(circle,rgba(21,156,94,.22),rgba(14,92,56,.08) 55%,transparent 80%);
-  filter:blur(14px);
-  animation:floatGlow ease-in-out infinite;
+  background:radial-gradient(circle,rgba(21,156,94,.15),transparent 70%);
+  will-change:opacity;
+  animation:glowPulse ease-in-out infinite;
 }
-@keyframes floatGlow{
-  0%,100%{transform:translateY(0) translateX(0) scale(1);   opacity:.22;}
-  33%    {transform:translateY(-28px) translateX(14px) scale(1.12);opacity:.48;}
-  66%    {transform:translateY(-12px) translateX(-9px) scale(.88);opacity:.28;}
+@keyframes glowPulse{
+  0%,100%{opacity:.12;}
+  50%    {opacity:.32;}
 }
-/* E — Islamic 9-pointed star polygons */
+
+/* E — Star polygons: slow rise only */
 .mote-poly{
   position:absolute;
-  background:rgba(245,216,112,.62);
+  background:rgba(245,216,112,.55);
   clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-  box-shadow:0 0 7px rgba(245,216,112,.52);
+  will-change:transform,opacity;
   animation:polyRise linear infinite;
 }
 @keyframes polyRise{
-  0%  {transform:translateY(104vh) rotate(0deg) scale(.4); opacity:0;}
-  10% {opacity:.8;}
-  90% {opacity:.18;}
-  100%{transform:translateY(-8vh) rotate(560deg) scale(.1); opacity:0;}
+  0%  {transform:translateY(104vh); opacity:0;}
+  10% {opacity:.65;}
+  90% {opacity:.15;}
+  100%{transform:translateY(-6vh); opacity:0;}
 }
-/* F — Crescent shapes */
+
+/* F — Crescents: gentle fade only */
 .mote-crescent{
   position:absolute;border-radius:50%;
-  border:2px solid rgba(245,216,112,.50);
-  box-shadow:0 0 6px rgba(245,216,112,.35);
-  animation:crescentDrift ease-in-out infinite;
+  border:1.5px solid rgba(245,216,112,.35);
+  will-change:opacity;
+  animation:crescentFade ease-in-out infinite;
 }
-@keyframes crescentDrift{
-  0%,100%{transform:translateY(0) rotate(0deg);   opacity:.3;}
-  50%    {transform:translateY(-22px) rotate(180deg);opacity:.65;}
+@keyframes crescentFade{
+  0%,100%{opacity:.15;}
+  50%    {opacity:.45;}
+}
+
+/* Mobile override: pause streaks entirely to save GPU */
+@media(max-width:600px){
+  .mote-streak{ animation:none; display:none; }
 }
 
 /* ══════════════════════════════════════════════════
@@ -190,6 +194,7 @@ body{
 .halo::before{
   content:'';position:absolute;inset:-8px;border-radius:50%;
   background:conic-gradient(from 0deg,transparent 0%,rgba(212,168,50,.12) 20%,rgba(245,216,112,.28) 50%,rgba(212,168,50,.12) 80%,transparent 100%);
+  will-change:transform;
   animation:haloSpin 12s linear infinite;
 }
 .halo::after{
@@ -201,6 +206,7 @@ body{
 .dome-svg{
   width:88px;height:88px;display:block;margin:0 auto;position:relative;z-index:1;
   filter:drop-shadow(0 0 24px rgba(212,168,50,.70)) drop-shadow(0 0 60px rgba(212,168,50,.30)) drop-shadow(0 6px 12px rgba(0,0,0,.60));
+  will-change:transform;
   animation:domeLevitate 7s ease-in-out infinite;
 }
 @keyframes domeLevitate{0%,100%{transform:translateY(0) rotate(0);}33%{transform:translateY(-11px) rotate(.7deg);}66%{transform:translateY(-5px) rotate(-.4deg);}}
@@ -396,6 +402,7 @@ body{
   border-color:rgba(253,238,160,.80) !important;
   transform:scale(1.013);
   z-index:4;
+  will-change:box-shadow,transform;
   box-shadow:
     0 0 0 2px   rgba(253,238,160,.55),
     0 0 24px    rgba(253,238,160,.42),
@@ -509,6 +516,8 @@ body{
 /* Floating ember sparks (JS spawned) */
 .ember{
   position:absolute;border-radius:50%;pointer-events:none;z-index:9;
+  will-change:transform,opacity;
+  transform:translateZ(0);
   animation:emberFly linear forwards;
 }
 @keyframes emberFly{
@@ -641,6 +650,60 @@ body{
 @media(min-width:860px){.root{max-width:640px;}.p-name-bn{font-size:1.62rem;}.p-time{font-size:1.7rem;}.mosque-name{font-size:2.6rem;}}
 @media(min-width:1280px){.root{max-width:800px;}.p-inner{padding:20px 24px;}.p-badge{width:60px;height:60px;font-size:1.65rem;}.p-name-bn{font-size:1.92rem;}.p-time{font-size:2rem;min-width:110px;}}
 @media(min-width:1800px){.root{max-width:1020px;}.p-inner{padding:26px 32px;gap:18px;}.p-badge{width:74px;height:74px;font-size:2rem;}.p-name-bn{font-size:2.4rem;}.p-time{font-size:2.5rem;min-width:145px;}}
+
+/* ══════════════════════════════════════════════════
+   MOBILE PERFORMANCE OVERRIDES
+   Strips the most GPU-hungry effects on small screens
+══════════════════════════════════════════════════ */
+@media(max-width:600px){
+  /* Kill box-shadow animations — biggest GPU win */
+  .p-row.now{
+    animation: cardSlideIn .45s cubic-bezier(.22,1,.36,1) both !important;
+    box-shadow:
+      0 0 0 2px rgba(253,238,160,.55),
+      0 0 20px rgba(212,168,50,.25) !important;
+    will-change: transform;
+  }
+  /* Simplify nowBreath to opacity only */
+  @keyframes nowBreath{
+    0%,100%{opacity:.92;}
+    50%    {opacity:1;}
+  }
+  /* Simplify badge — no scale pulse */
+  .p-row.now .p-badge{
+    animation: none !important;
+    box-shadow:0 0 16px rgba(253,238,160,.40) !important;
+  }
+  /* Kill ping rings on mobile */
+  .p-row.now .p-badge::after{ animation:none !important; opacity:0 !important; }
+  .now-ping2{ animation:none !important; opacity:0 !important; }
+  /* Simplify time animation */
+  @keyframes timeInferno{
+    0%,100%{text-shadow:0 0 18px rgba(253,238,160,.70);}
+    50%    {text-shadow:0 0 28px rgba(255,255,220,.95);}
+  }
+  /* Kill stripe flicker */
+  @keyframes stripeFlicker{ 0%,100%{opacity:.85;} }
+  /* Kill top-edge glow animation */
+  @keyframes topEdgeGlow{ 0%,100%{opacity:.6;} }
+  /* Kill shimmer sweeps on all rows — saves many concurrent animations */
+  .p-shimmer{ animation:none !important; opacity:0; }
+  /* Slow down halo spin */
+  .halo::before{ animation-duration:20s !important; }
+  /* Simplify dome levitation */
+  @keyframes domeLevitate{
+    0%,100%{transform:translateY(0);}
+    50%    {transform:translateY(-6px);}
+  }
+  /* Kill basmala breath — static text shadow */
+  .basmala{ animation:none !important; }
+  /* Kill banner sweep */
+  .date-banner-inner{ animation:none !important; opacity:0; }
+  /* Kill btn halo pulse */
+  .save-btn,.mobile-save-btn{ animation:none !important; }
+  /* Reduce backdrop-filter usage */
+  .tab-rail{ backdrop-filter:none; -webkit-backdrop-filter:none; }
+}
 </style>
 </head>
 <body>
@@ -1057,14 +1120,15 @@ function markActiveWaqt(){
   /* Continuous embers on active card */
   clearInterval(_emberTimer);
   const activeRow=document.querySelector(`.p-row[data-key="${activeKey}"]`);
-  if(activeRow){
-    _emberTimer=setInterval(()=>spawnEmbers(activeRow),700);
+  if(activeRow && !('ontouchstart' in window)){
+    _emberTimer=setInterval(()=>spawnEmbers(activeRow),1000);
   }
 }
 
 function spawnEmbers(row){
   const cols=["#fdeea0","#f5d870","#fff8d0","#e8bf50","#ffecb3","#fffde7","#ffffff"];
-  const n=2+Math.floor(Math.random()*3);
+  const isMob='ontouchstart' in window;
+  const n=isMob ? 1+Math.floor(Math.random()*2) : 2+Math.floor(Math.random()*3);
   for(let i=0;i<n;i++){
     const e=document.createElement("div"); e.className="ember";
     const sz=3+Math.random()*7;
@@ -1094,66 +1158,78 @@ WAQT_KEYS.forEach(k=>{
 });
 
 /* ═══════════════════════════════════════
-   RICH FLOATING BACKGROUND (5 types)
+   FLOATING BACKGROUND — mobile-first lean
 ═══════════════════════════════════════ */
 (function spawnAllFloaters(){
   const D=document.getElementById("dust");
   if(!D) return;
+  const mob = ('ontouchstart' in window) || window.innerWidth <= 600;
 
-  /* A — Gold rising orbs (22) */
-  for(let i=0;i<22;i++){
+  /* A — Gold orbs: 7 mob / 16 desktop */
+  const orbN = mob ? 7 : 16;
+  for(let i=0;i<orbN;i++){
     const m=document.createElement("div"); m.className="mote";
-    const sz=3+Math.random()*9, dur=12+Math.random()*22, dx=(Math.random()-.5)*170;
-    m.style.cssText=`width:${sz}px;height:${sz}px;left:${2+Math.random()*96}%;`+
+    const sz=3+Math.random()*6, dur=18+Math.random()*18, dx=(Math.random()-.5)*80;
+    m.style.cssText=`width:${sz}px;height:${sz}px;left:${3+Math.random()*94}%;`+
       `--dx:${dx}px;animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;`+
-      `opacity:${.15+Math.random()*.35};`;
+      `opacity:${.20+Math.random()*.25};`;
     D.appendChild(m);
   }
-  /* B — Twinkling star sparks (30) */
-  for(let i=0;i<30;i++){
+
+  /* B — Stars: 10 mob / 20 desktop */
+  const starN = mob ? 10 : 20;
+  for(let i=0;i<starN;i++){
     const m=document.createElement("div"); m.className="mote-star";
-    const dur=2.5+Math.random()*5;
+    const dur=4+Math.random()*6;
     m.style.cssText=`left:${1+Math.random()*98}%;top:${Math.random()*92}%;`+
       `animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;`+
-      `opacity:${.28+Math.random()*.55};`;
+      `opacity:${.40+Math.random()*.45};`;
     D.appendChild(m);
   }
-  /* C — Diagonal streaks (14) */
-  for(let i=0;i<14;i++){
-    const m=document.createElement("div"); m.className="mote-streak";
-    const w=25+Math.random()*65, dur=9+Math.random()*14, dx=(Math.random()-.5)*220;
-    m.style.cssText=`width:${w}px;left:${Math.random()*88}%;`+
-      `--dx:${dx}px;animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;`+
-      `opacity:${.18+Math.random()*.40};`;
-    D.appendChild(m);
+
+  /* C — Streaks: 0 mob / 7 desktop */
+  if(!mob){
+    for(let i=0;i<7;i++){
+      const m=document.createElement("div"); m.className="mote-streak";
+      const w=30+Math.random()*55, dur=12+Math.random()*12;
+      m.style.cssText=`width:${w}px;top:${Math.random()*90}%;left:${Math.random()*80}%;`+
+        `animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;opacity:.30;`;
+      D.appendChild(m);
+    }
   }
-  /* D — Large emerald glows (9) */
-  for(let i=0;i<9;i++){
+
+  /* D — Glows: 2 mob / 5 desktop */
+  const glowN = mob ? 2 : 5;
+  for(let i=0;i<glowN;i++){
     const m=document.createElement("div"); m.className="mote-glow";
-    const sz=55+Math.random()*130, dur=7+Math.random()*13;
+    const sz=70+Math.random()*90, dur=12+Math.random()*10;
     m.style.cssText=`width:${sz}px;height:${sz}px;`+
-      `left:${Math.random()*88}%;top:${Math.random()*88}%;`+
+      `left:${Math.random()*85}%;top:${Math.random()*85}%;`+
       `animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;`;
     D.appendChild(m);
   }
-  /* E — Islamic star polygons (12) */
-  for(let i=0;i<12;i++){
+
+  /* E — Polygons: 3 mob / 7 desktop */
+  const polyN = mob ? 3 : 7;
+  for(let i=0;i<polyN;i++){
     const m=document.createElement("div"); m.className="mote-poly";
-    const sz=4+Math.random()*8, dur=16+Math.random()*20;
+    const sz=4+Math.random()*5, dur=22+Math.random()*16;
     m.style.cssText=`width:${sz}px;height:${sz}px;`+
       `left:${4+Math.random()*92}%;`+
       `animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;`+
-      `opacity:${.22+Math.random()*.48};`;
+      `opacity:${.22+Math.random()*.35};`;
     D.appendChild(m);
   }
-  /* F — Crescent shapes (8) */
-  for(let i=0;i<8;i++){
+
+  /* F — Crescents: 2 mob / 5 desktop */
+  const crN = mob ? 2 : 5;
+  for(let i=0;i<crN;i++){
     const m=document.createElement("div"); m.className="mote-crescent";
-    const sz=6+Math.random()*14, dur=5+Math.random()*9;
+    const sz=6+Math.random()*10, dur=8+Math.random()*8;
     m.style.cssText=`width:${sz}px;height:${sz}px;`+
       `left:${3+Math.random()*94}%;top:${5+Math.random()*88}%;`+
       `animation-duration:${dur}s;animation-delay:-${Math.random()*dur}s;`+
-      `opacity:${.18+Math.random()*.40};`;
+      `opacity:${.15+Math.random()*.25};`;
     D.appendChild(m);
   }
 })();
