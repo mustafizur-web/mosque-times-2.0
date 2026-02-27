@@ -744,6 +744,111 @@ body{
 }
 
 /* ══════════════════════════════════════════════════
+   NEXT PRAYER COUNTDOWN PANEL
+══════════════════════════════════════════════════ */
+.next-prayer-panel{
+  position:relative;
+  background:linear-gradient(160deg,rgba(10,22,28,.97) 0%,rgba(7,14,18,.98) 60%,rgba(12,22,32,.97) 100%);
+  border:1px solid rgba(79,160,201,.30);
+  border-radius:var(--r3);
+  margin-bottom:12px;
+  overflow:hidden;
+  box-shadow:var(--sh2),0 0 0 1px rgba(79,160,201,.10),0 0 50px rgba(14,56,92,.20),inset 0 1px 0 rgba(79,160,201,.18);
+  padding:16px 10px 14px;
+}
+.next-prayer-panel::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent 0%,#3a8fc4 20%,#7fcff5 50%,#3a8fc4 80%,transparent 100%);
+}
+.next-prayer-panel::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 0%,rgba(79,160,201,.45) 40%,rgba(79,160,201,.70) 50%,rgba(79,160,201,.45) 60%,transparent 100%);
+}
+.npp-corner{position:absolute;width:18px;height:18px;pointer-events:none;}
+.npp-corner.tl{top:5px;left:5px;border-top:1px solid rgba(79,160,201,.60);border-left:1px solid rgba(79,160,201,.60);border-radius:4px 0 0 0;}
+.npp-corner.tr{top:5px;right:5px;border-top:1px solid rgba(79,160,201,.60);border-right:1px solid rgba(79,160,201,.60);border-radius:0 4px 0 0;}
+.npp-corner.bl{bottom:5px;left:5px;border-bottom:1px solid rgba(79,160,201,.40);border-left:1px solid rgba(79,160,201,.40);border-radius:0 0 0 4px;}
+.npp-corner.br{bottom:5px;right:5px;border-bottom:1px solid rgba(79,160,201,.40);border-right:1px solid rgba(79,160,201,.40);border-radius:0 0 4px 0;}
+.npp-header{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-bottom:10px;flex-wrap:wrap;
+}
+.npp-title{
+  font-family:'Aref Ruqaa Ink',serif;
+  font-size:clamp(.72rem,3.2vw,.92rem);
+  letter-spacing:2px;
+  background:linear-gradient(135deg,#7fcff5,#b8e8ff,#7fcff5);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  font-weight:700;white-space:nowrap;
+}
+.npp-gem{
+  width:7px;height:7px;background:#4fa0c9;
+  transform:rotate(45deg);box-shadow:0 0 10px #4fa0c9,0 0 20px rgba(79,160,201,.4);
+  flex-shrink:0;
+}
+.npp-star{font-size:.8rem;color:#5bbde0;opacity:.7;flex-shrink:0;}
+.npp-name-row{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-bottom:10px;
+}
+.npp-prayer-emoji{font-size:1.4rem;line-height:1;}
+.npp-prayer-name{
+  font-family:'Tiro Bangla',serif;
+  font-size:clamp(.95rem,4.5vw,1.25rem);
+  color:#b8e8ff;
+  text-shadow:0 0 18px rgba(127,207,245,.60);
+  letter-spacing:.5px;
+}
+.npp-prayer-ar{
+  font-family:'Noto Naskh Arabic',serif;
+  font-size:clamp(.72rem,3vw,.88rem);
+  color:rgba(127,207,245,.55);
+  direction:rtl;margin-left:4px;
+}
+.npp-time-wrap{display:flex;align-items:stretch;justify-content:center;gap:3px;}
+.npp-digit-box{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.npp-hh,.npp-mm,.npp-ss{
+  font-family:'Aref Ruqaa Ink',serif;
+  font-size:clamp(1.45rem,7vw,2.4rem);
+  font-weight:700;line-height:1;
+  min-width:2ch;text-align:center;display:block;
+  border-radius:6px;padding:5px 6px 3px;
+  color:#c8eeff;
+  text-shadow:0 0 18px rgba(127,207,245,.75),0 0 36px rgba(79,160,201,.35);
+  background:rgba(79,160,201,.10);
+  border:1px solid rgba(79,160,201,.28);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 10px rgba(0,0,0,.4);
+}
+.npp-digit-lbl{
+  font-family:'Hind Siliguri',sans-serif;
+  font-size:clamp(.38rem,1.5vw,.46rem);
+  letter-spacing:.8px;text-transform:uppercase;
+  color:var(--ash);font-weight:700;
+}
+.npp-colon{
+  font-family:'Aref Ruqaa Ink',serif;
+  font-size:clamp(1.1rem,5vw,1.9rem);
+  color:#4fa0c9;line-height:1;
+  align-self:center;padding-bottom:14px;
+  animation:colonBlink 1s step-end infinite;
+}
+.npp-sublabel{
+  font-family:'Tiro Bangla',serif;
+  font-size:clamp(.52rem,2.4vw,.66rem);
+  margin-top:8px;letter-spacing:.3px;
+  padding:3px 8px;border-radius:16px;display:inline-block;
+  line-height:1.4;text-align:center;width:100%;
+  color:rgba(127,207,245,.80);
+  background:rgba(79,160,201,.08);border:1px solid rgba(79,160,201,.20);
+}
+.npp-waqt-time{
+  font-family:'Hind Siliguri',sans-serif;
+  font-size:clamp(.55rem,2.5vw,.65rem);
+  color:rgba(127,207,245,.50);
+  display:block;text-align:center;margin-top:5px;letter-spacing:.4px;
+}
+
+/* ══════════════════════════════════════════════════
    VISITOR COUNTER — compact Islamic design
 ══════════════════════════════════════════════════ */
 .visitor-footer{
@@ -1210,6 +1315,42 @@ body{
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- NEXT PRAYER COUNTDOWN -->
+    <div class="next-prayer-panel" role="complementary" aria-label="পরবর্তী নামাজের বাকি সময়">
+      <div class="npp-corner tl"></div><div class="npp-corner tr"></div>
+      <div class="npp-corner bl"></div><div class="npp-corner br"></div>
+      <div class="npp-header">
+        <div class="npp-gem"></div>
+        <span class="npp-star">✦</span>
+        <span class="npp-title">পরবর্তী নামাজের বাকি সময়</span>
+        <span class="npp-star">✦</span>
+        <div class="npp-gem"></div>
+      </div>
+      <div class="npp-name-row">
+        <span class="npp-prayer-emoji" id="npp-emoji">🕌</span>
+        <span class="npp-prayer-name" id="npp-name">লোড হচ্ছে...</span>
+        <span class="npp-prayer-ar" id="npp-ar"></span>
+      </div>
+      <div class="npp-time-wrap">
+        <div class="npp-digit-box">
+          <span class="npp-hh" id="npp-h">--</span>
+          <span class="npp-digit-lbl">ঘণ্টা</span>
+        </div>
+        <span class="npp-colon">:</span>
+        <div class="npp-digit-box">
+          <span class="npp-mm" id="npp-m">--</span>
+          <span class="npp-digit-lbl">মিনিট</span>
+        </div>
+        <span class="npp-colon">:</span>
+        <div class="npp-digit-box">
+          <span class="npp-ss" id="npp-s">--</span>
+          <span class="npp-digit-lbl">সেকেন্ড</span>
+        </div>
+      </div>
+      <div class="npp-sublabel" id="npp-lbl">অপেক্ষা করুন...</div>
+      <span class="npp-waqt-time" id="npp-waqt-time"></span>
     </div>
 
     <div class="prayer-list" role="list">
@@ -1796,6 +1937,123 @@ setTimeout(()=>{refreshDates();setInterval(refreshDates,86400000);},new Date().s
   const obs = new MutationObserver(()=>{ tickAll(); });
   ["t-iftar","t-sehri"].forEach(id=>{
     const el=document.getElementById(id);
+    if(el) obs.observe(el,{childList:true,characterData:true,subtree:true});
+  });
+})();
+
+/* ═══════════════════════════════════════
+   NEXT PRAYER COUNTDOWN TIMER
+   Finds next upcoming prayer and counts down to it
+═══════════════════════════════════════ */
+(function initNextPrayerCountdown(){
+  const pad  = n => String(n).padStart(2,"0");
+  const BN2  = s => String(s).replace(/\d/g, d => "০১২৩৪৫৬৭৮৯"[d]);
+
+  /* Prayer definitions: key, display name, Arabic, emoji */
+  const PRAYERS = [
+    { key:"fajr",    name:"ফজর",    ar:"الفجر",    emoji:"🌄" },
+    { key:"zuhr",    name:"যোহর",   ar:"الظهر",    emoji:"☀️" },
+    { key:"asr",     name:"আসর",    ar:"العصر",    emoji:"🌤" },
+    { key:"maghrib", name:"মাগরিব", ar:"المغرب",   emoji:"🌆" },
+    { key:"isha",    name:"এশা",    ar:"العشاء",   emoji:"🌃" },
+  ];
+
+  function parseTimeTxt(txt){
+    if(!txt) return null;
+    const s = txt.replace(/[০-৯]/g, d=>"০১২৩৪৫৬৭৮৯".indexOf(d).toString());
+    const m = s.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+    if(!m) return null;
+    let h=parseInt(m[1]), mn=parseInt(m[2]);
+    if(/pm/i.test(m[3])&&h!==12) h+=12;
+    if(/am/i.test(m[3])&&h===12) h=0;
+    return h*60+mn;
+  }
+
+  function getNextPrayer(){
+    const now = new Date();
+    const curMins = now.getHours()*60+now.getMinutes();
+    /* Find first prayer whose time is still in the future today */
+    for(const p of PRAYERS){
+      const el = document.getElementById("t-"+p.key);
+      if(!el) continue;
+      const mins = parseTimeTxt(el.textContent||"");
+      if(mins===null) continue;
+      if(mins > curMins){
+        const target = new Date(now);
+        target.setHours(Math.floor(mins/60), mins%60, 0, 0);
+        return { prayer:p, target, timeStr:el.textContent };
+      }
+    }
+    /* All prayers passed today — next is Fajr tomorrow */
+    const p = PRAYERS[0];
+    const el = document.getElementById("t-"+p.key);
+    const mins = parseTimeTxt(el?el.textContent:"");
+    if(mins===null) return null;
+    const target = new Date(now);
+    target.setDate(target.getDate()+1);
+    target.setHours(Math.floor(mins/60), mins%60, 0, 0);
+    return { prayer:p, target, timeStr:el?el.textContent:"" };
+  }
+
+  function tickNextPrayer(){
+    const result = getNextPrayer();
+    const hEl=document.getElementById("npp-h");
+    const mEl=document.getElementById("npp-m");
+    const sEl=document.getElementById("npp-s");
+    const lEl=document.getElementById("npp-lbl");
+    const nEl=document.getElementById("npp-name");
+    const arEl=document.getElementById("npp-ar");
+    const emEl=document.getElementById("npp-emoji");
+    const wtEl=document.getElementById("npp-waqt-time");
+    if(!hEl||!mEl||!sEl) return;
+
+    if(!result){
+      hEl.textContent=mEl.textContent=sEl.textContent="--";
+      if(lEl) lEl.textContent="সময় পাওয়া যায়নি";
+      return;
+    }
+
+    /* Update prayer name/ar/emoji */
+    if(nEl) nEl.textContent = result.prayer.name;
+    if(arEl) arEl.textContent = result.prayer.ar;
+    if(emEl) emEl.textContent = result.prayer.emoji;
+    if(wtEl) wtEl.textContent = "ওয়াক্তের সময়: "+result.timeStr;
+
+    const diffMs = result.target.getTime()-Date.now();
+    if(diffMs<=0){
+      hEl.textContent=mEl.textContent=sEl.textContent=BN2("00");
+      if(lEl) lEl.textContent="🕌 "+result.prayer.name+"এর ওয়াক্ত হয়েছে!";
+      return;
+    }
+
+    const totalSec=Math.floor(diffMs/1000);
+    const hh=Math.floor(totalSec/3600);
+    const mm=Math.floor((totalSec%3600)/60);
+    const ss=totalSec%60;
+
+    hEl.textContent=BN2(pad(hh));
+    mEl.textContent=BN2(pad(mm));
+    sEl.textContent=BN2(pad(ss));
+
+    if(lEl){
+      if(hh>0)      lEl.textContent=BN2(hh)+" ঘণ্টা "+BN2(mm)+" মিনিট বাকি";
+      else if(mm>0) lEl.textContent=BN2(mm)+" মিনিট "+BN2(ss)+" সেকেন্ড বাকি";
+      else          lEl.textContent="মাত্র "+BN2(ss)+" সেকেন্ড বাকি!";
+    }
+  }
+
+  tickNextPrayer();
+  let _lastSec=-1;
+  (function rafTick(){
+    const s=Math.floor(Date.now()/1000);
+    if(s!==_lastSec){_lastSec=s;tickNextPrayer();}
+    requestAnimationFrame(rafTick);
+  })();
+
+  /* Re-tick when Firebase updates prayer times */
+  const obs=new MutationObserver(()=>tickNextPrayer());
+  ["fajr","zuhr","asr","maghrib","isha"].forEach(id=>{
+    const el=document.getElementById("t-"+id);
     if(el) obs.observe(el,{childList:true,characterData:true,subtree:true});
   });
 })();
